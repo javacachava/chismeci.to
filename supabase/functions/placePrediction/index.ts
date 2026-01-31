@@ -5,6 +5,11 @@ import {
   jsonResponse,
   sha256Hex
 } from "../_shared/utils.ts";
+import {
+  getVudyHeaders,
+  isJwtExpired,
+  refreshVudySession
+} from "../_shared/vudy-auth.ts";
 
 type PlacePredictionPayload = {
   market_id: string;
@@ -29,6 +34,22 @@ Deno.serve(async (req) => {
   const serviceRoleKey = getEnv("SUPABASE_SERVICE_ROLE_KEY");
   const vudyBaseUrl = getEnv("VUDY_BASE_URL");
   const vudyApiKey = getEnv("VUDY_API_KEY");
+
+  // Optional Pattern B credentials
+  const vudyProfileId = Deno.env.get("VUDY_PROFILE_ID");
+  const vudyTeamId = Deno.env.get("VUDY_TEAM_ID");
+
+  // Optional Pattern C credentials
+  let vudySessionToken = Deno.env.get("VUDY_SESSION_TOKEN");
+
+  // If session token exists and near expiry, try to refresh
+  if (vudySessionToken && isJwtExpired(vudySessionToken)) {
+    vudySessionToken = await refreshVudySession(
+      vudyBaseUrl,
+      vudyApiKey,
+      vudySessionToken
+    );
+  }
 
   const authClient = createClient(supabaseUrl, anonKey, {
     global: {
@@ -83,12 +104,17 @@ Deno.serve(async (req) => {
     `${userData.user.id}:${payload.market_id}:${ACTION_TYPE}`
   );
 
+  // Build headers based on available credentials
+  const authHeaders = getVudyHeaders({
+    apiKey: vudyApiKey,
+    profileId: vudyProfileId,
+    teamId: vudyTeamId,
+    sessionToken: vudySessionToken
+  });
+
   const vudyResponse = await fetch(`${vudyBaseUrl}/consume`, {
     method: "POST",
-    headers: {
-      "Content-Type": "application/json",
-      "X-API-Key": vudyApiKey
-    },
+    headers: authHeaders,
     body: JSON.stringify({
       user_id: userData.user.id,
       market_id: payload.market_id,
