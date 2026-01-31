@@ -1,12 +1,21 @@
 import Link from "next/link";
-import { createSupabaseServerClient } from "@/lib/supabaseServer";
+import { createSupabaseServerClient, getDevUser } from "@/lib/supabaseServer";
 import { AuthButton } from "./AuthButton";
 
 export async function Header() {
-  const supabase = await createSupabaseServerClient();
-  const {
-    data: { user }
-  } = await supabase.auth.getUser();
+  const devUser = getDevUser();
+
+  let userEmail: string | null = null;
+
+  if (devUser) {
+    userEmail = devUser.email;
+  } else {
+    const supabase = await createSupabaseServerClient();
+    const {
+      data: { user }
+    } = await supabase.auth.getUser();
+    userEmail = user?.email ?? null;
+  }
 
   return (
     <header className="border-b border-neutral-200 bg-white">
@@ -17,7 +26,7 @@ export async function Header() {
         >
           chambresito
         </Link>
-        <AuthButton userEmail={user?.email ?? null} />
+        <AuthButton userEmail={userEmail} />
       </div>
     </header>
   );
