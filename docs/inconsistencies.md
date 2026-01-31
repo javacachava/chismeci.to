@@ -94,3 +94,99 @@ if (cronSecret !== Deno.env.get("CRON_SECRET")) {
   return jsonResponse(401, { error: "unauthorized" });
 }
 ```
+
+---
+
+## API-03: Market Creation Endpoint Path
+
+**Date:** 2026-01-31
+
+**Requirement (TASKS.md):**
+> API-03: `POST /markets/create` - Insert validated market (admin only)
+
+**Implementation:**
+```
+POST /api/markets
+```
+
+**Decision:**
+Used RESTful convention where `POST /resource` creates a new resource, rather than `/resource/create`. This is consistent with standard REST API design patterns:
+- `GET /markets` - List markets
+- `POST /markets` - Create market
+- `GET /markets/:id` - Get single market
+
+**Rationale:**
+- Industry-standard REST convention
+- Cleaner API surface
+- Consistent with other endpoints in the system
+
+---
+
+## API Endpoints: Error Response Format
+
+**Date:** 2026-01-31
+
+**Requirement (docs/api/endpoints.md):**
+```json
+{
+  "success": false,
+  "error": {
+    "code": "ERROR_CODE",
+    "message": "Human-readable error message",
+    "details": "Additional error details (optional)"
+  }
+}
+```
+
+**Implementation:**
+```json
+{
+  "error": "error_code"
+}
+```
+
+**Decision:**
+Used the simpler error format that matches the existing Edge Functions (`placePrediction`, `resolveMarket`, `ingestMarketsFromX`). All three Edge Functions use:
+```typescript
+return jsonResponse(4xx, { error: "error_code" });
+```
+
+**Rationale:**
+- Consistency with existing Edge Functions
+- Simpler client-side error handling
+- Error codes are self-descriptive (e.g., `missing_auth`, `market_not_found`, `admin_required`)
+
+**Future Consideration:**
+If richer error messages are needed, the format can be extended to:
+```json
+{
+  "error": "error_code",
+  "message": "Human-readable message"
+}
+```
+
+---
+
+## API-01/API-08: Cron Secret Authentication
+
+**Date:** 2026-01-31
+
+**Observation:**
+The plan specified adding `X-Cron-Secret` header validation for cron-triggered endpoints (API-01 and API-08) when exposed via Next.js API routes.
+
+**Implementation:**
+Added `validateCronSecret()` helper in `lib/apiHelpers.ts` and `requireAdminOrCron()` for endpoints that accept either admin JWT or cron secret.
+
+**Affected Endpoints:**
+- `POST /api/ingest/x` - Accepts cron secret OR admin JWT
+- `POST /api/markets/:id/resolve` - Accepts cron secret OR admin JWT
+
+**Required Environment Variable:**
+```
+CRON_SECRET=<secure-random-string>
+```
+
+**Rationale:**
+- Defense-in-depth when exposing ingestion/resolution via HTTP
+- Allows cron jobs to trigger without user context
+- Falls back to admin JWT authentication for manual triggers

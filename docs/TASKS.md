@@ -146,28 +146,57 @@ This document contains all actionable implementation tasks extracted from the do
 
 ### 4.1 Ingestion (Backend Only)
 
-- [ ] **API-01**: `POST /ingest/x` - Pull posts from X API (cron)
-- [ ] **API-02**: `POST /ingest/normalize` - Apply filters and normalize
-- [ ] **API-03**: `POST /markets/create` - Insert validated market (admin only)
+- [x] **API-01**: `POST /api/ingest/x` - Pull posts from X API (cron/admin)
+  - Implemented in `app/api/ingest/x/route.ts`
+  - Auth: Cron secret OR admin JWT
+- [x] **API-02**: `POST /api/ingest/normalize` - Apply filters and normalize
+  - Implemented in `app/api/ingest/normalize/route.ts`
+  - Auth: Admin JWT
+  - Uses extracted filters from `lib/ingestFilters.ts`
+- [x] **API-03**: `POST /api/markets` - Insert validated market (admin only)
+  - Implemented in `app/api/markets/route.ts`
+  - Auth: Admin JWT
+  - Note: Path changed from `/markets/create` to `/markets` per REST convention (see `docs/inconsistencies.md`)
 
 ### 4.2 Public (Read-Only)
 
-- [ ] **API-04**: `GET /markets` - List open markets
-- [ ] **API-05**: `GET /markets/:id` - Get market detail with rules
-- [ ] **API-06**: `GET /markets/:id/snapshots` - Get aggregate consensus
+- [x] **API-04**: `GET /api/markets` - List open markets
+  - Implemented in `app/api/markets/route.ts`
+  - Auth: None (RLS handles access)
+  - Query params: `limit`, `offset`, `sort`, `order`
+- [x] **API-05**: `GET /api/markets/:id` - Get market detail with rules
+  - Implemented in `app/api/markets/[id]/route.ts`
+  - Auth: None (RLS handles access)
+  - Includes `resolution_rules` join
+- [x] **API-06**: `GET /api/markets/:id/snapshots` - Get aggregate consensus
+  - Implemented in `app/api/markets/[id]/snapshots/route.ts`
+  - Auth: None (RLS handles access)
+  - Query params: `from`, `to`
 
 ### 4.3 Core
 
-- [ ] **API-07**: `POST /predictions` - Place prediction (calls placePrediction Edge Function)
+- [x] **API-07**: `POST /api/predictions` - Place prediction (calls placePrediction Edge Function)
+  - Implemented in `app/api/predictions/route.ts`
+  - Auth: User JWT
+  - Proxies to `placePrediction` Edge Function
 
 ### 4.4 Resolution
 
-- [ ] **API-08**: `POST /markets/:id/resolve` - Resolve market (admin/cron)
-- [ ] **API-09**: `POST /markets/:id/disable` - Disable market (admin)
+- [x] **API-08**: `POST /api/markets/:id/resolve` - Resolve market (admin/cron)
+  - Implemented in `app/api/markets/[id]/resolve/route.ts`
+  - Auth: Cron secret OR admin JWT
+  - Proxies to `resolveMarket` Edge Function
+- [x] **API-09**: `POST /api/markets/:id/disable` - Disable market (admin)
+  - Implemented in `app/api/markets/[id]/disable/route.ts`
+  - Auth: Admin JWT
+  - Sets market status to `canceled`
 
 ### 4.5 User
 
-- [ ] **API-10**: `GET /me` - Get user profile, reputation, history
+- [x] **API-10**: `GET /api/me` - Get user profile, reputation, history
+  - Implemented in `app/api/me/route.ts`
+  - Auth: User JWT
+  - Returns: profile, reputation stats, recent predictions
 
 ---
 
