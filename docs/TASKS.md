@@ -204,29 +204,35 @@ This document contains all actionable implementation tasks extracted from the do
 
 ### 5.1 Pages
 
-- [ ] **FE-01**: Create market list page (`/markets`)
+- [x] **FE-01**: Create market list page (`/markets`)
 
   - Display open markets
   - Use neutral language ("participation credits")
   - No gambling terminology
+  - Implemented in `app/markets/page.tsx`
 
-- [ ] **FE-02**: Create market detail page (`/markets/[id]`)
+- [x] **FE-02**: Create market detail page (`/markets/[id]`)
   - Show question, resolution date, verification source
   - Display aggregate snapshots
   - No individual predictions shown
+  - Implemented in `app/markets/[id]/page.tsx`
+  - MarketStats component displays yes/no percentages as progress bars
 
 ### 5.2 Components
 
-- [ ] **FE-03**: Create prediction modal
+- [x] **FE-03**: Create prediction modal
 
   - Select YES/NO
   - Confirm credits to use
   - Submit prediction
+  - Implemented in `components/PredictionModal.tsx`
 
-- [ ] **FE-04**: Integrate Supabase Auth
-  - Login/logout
-  - Session management
-  - JWT handling
+- [x] **FE-04**: Integrate Supabase Auth
+  - Login/logout via magic link (email-based)
+  - Session management with `@supabase/ssr`
+  - JWT handling via cookies
+  - Components: `components/AuthButton.tsx`, `components/Header.tsx`
+  - Auth callback: `app/auth/callback/route.ts`
 
 ---
 
