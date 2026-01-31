@@ -42,12 +42,12 @@ export async function POST(req: NextRequest) {
   let extraBody: Record<string, string> = {};
 
   if (isDevBypass) {
-    const serviceRoleKey = process.env.SUPABASE_SERVICE_ROLE_KEY;
-    if (!serviceRoleKey) {
-      return jsonResponse(500, { error: "missing_service_role_key" });
+    const devBypassSecret = process.env.DEV_BYPASS_SECRET;
+    if (!devBypassSecret) {
+      return jsonResponse(500, { error: "missing_dev_bypass_secret" });
     }
-    authHeader = `Bearer ${serviceRoleKey}`;
-    extraBody = { dev_user_id: authResult.id };
+    authHeader = `Bearer ${devBypassSecret}`;
+    extraBody = { dev_user_id: authResult.id, dev_bypass_secret: devBypassSecret };
   } else {
     const header = req.headers.get("Authorization");
     if (!header) {

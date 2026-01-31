@@ -16,6 +16,7 @@ type PlacePredictionPayload = {
   choice: "yes" | "no";
   amount: number;
   dev_user_id?: string;
+  dev_bypass_secret?: string;
 };
 
 const ACTION_TYPE = "predict";
@@ -62,10 +63,11 @@ Deno.serve(async (req) => {
 
   // Determine user ID - either from dev bypass or JWT validation
   let userId: string;
-  const isServiceRole = token === serviceRoleKey;
+  const devBypassSecret = Deno.env.get("DEV_BYPASS_SECRET");
+  const isDevBypass = devBypassSecret && payload.dev_bypass_secret === devBypassSecret;
 
-  if (isServiceRole && payload.dev_user_id) {
-    // Service role call with dev user ID override
+  if (isDevBypass && payload.dev_user_id) {
+    // Dev bypass with shared secret
     userId = payload.dev_user_id;
   } else {
     // Normal flow: validate JWT and get user
