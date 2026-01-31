@@ -106,7 +106,7 @@ This document contains all actionable implementation tasks extracted from the do
 
 ### 3.1 placePrediction()
 
-- [ ] **EF-01**: Create `placePrediction` Edge Function
+- [x] **EF-01**: Create `placePrediction` Edge Function
   - Verify user session (JWT)
   - Verify market status is `open`
   - Generate idempotency_key: `hash(user_id + market_id + action_type)`
@@ -115,20 +115,22 @@ This document contains all actionable implementation tasks extracted from the do
   - Insert into `token_ledger` table
   - Insert/update `market_snapshots`
   - Wrap in transaction (atomic, retry-safe)
+  - See: [docs/results/EF-01.md](results/EF-01.md)
 
 ### 3.2 resolveMarket()
 
-- [ ] **EF-02**: Create `resolveMarket` Edge Function
+- [x] **EF-02**: Create `resolveMarket` Edge Function
   - Load `resolution_rules` for market
   - Fetch data from declared verification source
   - Evaluate outcome deterministically
   - Store resolution result + evidence
   - Update market status to `resolved`
   - Award reputation points (NO tokens, NO refunds)
+  - See: [docs/results/EF-02.md](results/EF-02.md)
 
 ### 3.3 ingestMarketsFromX()
 
-- [ ] **EF-03**: Create `ingestMarketsFromX` Edge Function
+- [x] **EF-03**: Create `ingestMarketsFromX` Edge Function
   - Supabase Cron compatible
   - Pull trending topics from X API
   - Apply safety filters (reject >90%)
@@ -136,6 +138,7 @@ This document contains all actionable implementation tasks extracted from the do
   - Validate external verification source exists
   - Normalize to binary question + resolution date
   - Insert market only if not exists
+  - See: [docs/results/EF-03.md](results/EF-03.md)
 
 ---
 
