@@ -266,15 +266,15 @@ This document contains all actionable implementation tasks extracted from the do
 
 ### Pre-Launch
 
-- [ ] **SAFE-01**: Verify no secrets in client code
-- [ ] **SAFE-02**: Verify all token operations are idempotent
-- [ ] **SAFE-03**: Verify `vudy_tx_id` uniqueness is enforced
-- [ ] **SAFE-04**: Verify no admin actions exposed to frontend
-- [ ] **SAFE-05**: Verify no token balances stored locally
-- [ ] **SAFE-06**: Verify safety filters reject >90% of candidates
-- [ ] **SAFE-07**: Verify neutral language used (no gambling terms)
-- [ ] **SAFE-08**: Verify reputation points separate from token logic
-- [ ] **SAFE-09**: Verify users cannot create markets (system-only)
+- [x] **SAFE-01**: Verify no secrets in client code
+- [x] **SAFE-02**: Verify all token operations are idempotent
+- [x] **SAFE-03**: Verify `vudy_tx_id` uniqueness is enforced
+- [x] **SAFE-04**: Verify no admin actions exposed to frontend
+- [x] **SAFE-05**: Verify no token balances stored locally
+- [x] **SAFE-06**: Verify safety filters reject >90% of candidates
+- [x] **SAFE-07**: Verify neutral language used (no gambling terms)
+- [x] **SAFE-08**: Verify reputation points separate from token logic
+- [x] **SAFE-09**: Verify users cannot create markets (system-only)
 
 ---
 
