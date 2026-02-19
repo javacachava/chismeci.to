@@ -3,9 +3,29 @@
 @tailwind utilities;
 
 :root {
-  color-scheme: light;
+  color-scheme: dark;
 }
 
 body {
-  @apply bg-white text-neutral-900;
+  @apply bg-[#151921] text-white;
+  font-family: system-ui, -apple-system, sans-serif;
+}
+
+/* Scrollbar styling for dark theme */
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: #1E2329;
+}
+
+::-webkit-scrollbar-thumb {
+  background: #2A2F36;
+  border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: #3A3F46;
 }

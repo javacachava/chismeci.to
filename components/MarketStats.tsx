@@ -10,12 +10,12 @@ export function MarketStats({
   totalPredictions
 }: MarketStatsProps) {
   return (
-    <div className="rounded-lg border border-neutral-200 bg-white p-4">
+    <div className="rounded-lg border border-[#2A2F36] bg-[#1E2329] p-4">
       <div className="mb-3 flex items-center justify-between">
-        <span className="text-sm font-medium text-neutral-700">
+        <span className="text-sm font-medium text-white">
           Participación
         </span>
-        <span className="text-sm text-neutral-500">
+        <span className="text-sm text-[#A0A5B0]">
           {totalPredictions} {totalPredictions === 1 ? "predicción" : "predicciones"}
         </span>
       </div>
@@ -23,12 +23,12 @@ export function MarketStats({
       <div className="space-y-3">
         <div>
           <div className="mb-1 flex items-center justify-between text-sm">
-            <span className="text-neutral-600">Sí</span>
-            <span className="font-medium text-neutral-700">{yesPercentage}%</span>
+            <span className="text-[#A0A5B0]">Sí</span>
+            <span className="font-medium text-white">{yesPercentage}%</span>
           </div>
-          <div className="h-2 overflow-hidden rounded-full bg-neutral-200">
+          <div className="h-2 overflow-hidden rounded-full bg-[#2A2F36]">
             <div
-              className="h-full bg-neutral-700 transition-all"
+              className="h-full bg-[#3B82F6] transition-all"
               style={{ width: `${yesPercentage}%` }}
             />
           </div>
@@ -36,12 +36,12 @@ export function MarketStats({
 
         <div>
           <div className="mb-1 flex items-center justify-between text-sm">
-            <span className="text-neutral-600">No</span>
-            <span className="font-medium text-neutral-700">{noPercentage}%</span>
+            <span className="text-[#A0A5B0]">No</span>
+            <span className="font-medium text-white">{noPercentage}%</span>
           </div>
-          <div className="h-2 overflow-hidden rounded-full bg-neutral-200">
+          <div className="h-2 overflow-hidden rounded-full bg-[#2A2F36]">
             <div
-              className="h-full bg-neutral-400 transition-all"
+              className="h-full bg-[#6B7280] transition-all"
               style={{ width: `${noPercentage}%` }}
             />
           </div>
