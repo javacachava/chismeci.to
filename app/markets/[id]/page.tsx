@@ -8,10 +8,11 @@ import { Clock, ExternalLink, MessageCircle } from "lucide-react";
 import Link from "next/link";
 
 type MarketPageProps = {
-  params: { id: string };
+  params: Promise<{ id: string }>;
 };
 
 export default async function MarketPage({ params }: MarketPageProps) {
+  const { id } = await params;
   const supabase = await createSupabaseServerClient();
 
   const { data: market, error } = await supabase
@@ -19,7 +20,7 @@ export default async function MarketPage({ params }: MarketPageProps) {
     .select(
       "id, topic_text, question_text, description, status, ends_at, starts_at, verification_source_url"
     )
-    .eq("id", params.id)
+    .eq("id", id)
     .maybeSingle();
 
   if (error || !market) {
@@ -37,7 +38,7 @@ export default async function MarketPage({ params }: MarketPageProps) {
   const { data: snapshot } = await supabase
     .from("market_snapshots")
     .select("total_predictions, yes_count, no_count")
-    .eq("market_id", params.id)
+    .eq("market_id", id)
     .order("snapshot_at", { ascending: false })
     .limit(1)
     .maybeSingle();
