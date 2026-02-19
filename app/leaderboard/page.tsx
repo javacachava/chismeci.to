@@ -3,6 +3,9 @@ import { RightSidebar } from "@/components/RightSidebar";
 import { createSupabaseServerClient } from "@/lib/supabaseServer";
 import { Trophy, Medal, Award } from "lucide-react";
 
+export const dynamic = "force-dynamic";
+
+
 type LeaderboardEntry = {
   user_id: string;
   total_points: number;

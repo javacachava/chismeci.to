@@ -6,6 +6,8 @@ import { createSupabaseServerClient } from "@/lib/supabaseServer";
 import { MarketCardSkeleton, FeaturedMarketSkeleton } from "@/components/LoadingSkeleton";
 import { Suspense } from "react";
 
+export const dynamic = "force-dynamic";
+
 type MarketWithStats = {
   id: string;
   topic_text: string;

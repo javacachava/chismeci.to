@@ -9,14 +9,19 @@ export async function Header() {
 
   let userEmail: string | null = null;
 
-  if (devUser) {
-    userEmail = devUser.email;
-  } else {
-    const supabase = await createSupabaseServerClient();
-    const {
-      data: { user }
-    } = await supabase.auth.getUser();
-    userEmail = user?.email ?? null;
+  try {
+    if (devUser) {
+      userEmail = devUser.email;
+    } else {
+      const supabase = await createSupabaseServerClient();
+      const {
+        data: { user }
+      } = await supabase.auth.getUser();
+      userEmail = user?.email ?? null;
+    }
+  } catch {
+    // During build time env vars may not be available — render header without user
+    userEmail = null;
   }
 
   return (
