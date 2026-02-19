@@ -1,6 +1,6 @@
 "use client";
 
-import { useMemo, useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import { createSupabaseBrowserClient } from "@/lib/supabaseBrowser";
 import { Slider } from "@/components/ui/slider";
 import { ThumbsUp, ThumbsDown, Check, ArrowRight, X } from "lucide-react";
@@ -34,7 +34,11 @@ export function PredictionModal({
   const [amount, setAmount] = useState(DEFAULT_AMOUNT);
   const [message, setMessage] = useState<string | null>(null);
   const [isSubmitting, setIsSubmitting] = useState(false);
-  const supabase = useMemo(() => createSupabaseBrowserClient(), []);
+  const supabaseRef = useRef<ReturnType<typeof createSupabaseBrowserClient> | null>(null);
+
+  useEffect(() => {
+    supabaseRef.current = createSupabaseBrowserClient();
+  }, []);
 
   const disabled = marketStatus !== "open";
 
@@ -44,8 +48,8 @@ export function PredictionModal({
     setMessage(null);
     setIsSubmitting(true);
 
-    const session = await supabase.auth.getSession();
-    const accessToken = session.data.session?.access_token;
+    const session = await supabaseRef.current?.auth.getSession();
+    const accessToken = session?.data.session?.access_token;
 
     const url = "/api/predictions";
 
